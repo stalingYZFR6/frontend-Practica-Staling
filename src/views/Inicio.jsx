@@ -1,7 +1,10 @@
+
+
 const Inicio = () => {
     return (
         <>
-            <h2>Página de Inicio</h2>;
+          <h2> Pagina de inicio </h2>
+
         </>
     );
 }
