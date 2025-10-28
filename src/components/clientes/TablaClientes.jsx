@@ -29,21 +29,21 @@ const TablaClientes = ({ clientes, cargando }) => {
                     </tr>
                 </thead>
                 <tbody>
-                  {clientes.map((cliente) => {
-                    return(
-                        <tr key={cliente.id_cliente}>
-                            <td>{cliente.id_cliente}</td>
-                            <td>{cliente.primer_nombre}</td>
-                            <td>{cliente.segundo_nombre}</td>
-                            <td>{cliente.primer_apellido}</td>
-                            <td>{cliente.segundo_apellido}</td>
-                            <td>{cliente.celular}</td>
-                            <td>{cliente.direccion}</td>
-                            <td>{cliente.cedula}</td>
-                            <td>Acción</td>
-                        </tr>
-                    );
-                  })}
+                    {clientes.map((cliente) => {
+                        return (
+                            <tr key={cliente.id_cliente}>
+                                <td>{cliente.id_cliente}</td>
+                                <td>{cliente.primer_nombre}</td>
+                                <td>{cliente.segundo_nombre}</td>
+                                <td>{cliente.primer_apellido}</td>
+                                <td>{cliente.segundo_apellido}</td>
+                                <td>{cliente.celular}</td>
+                                <td>{cliente.direccion}</td>
+                                <td>{cliente.cedula}</td>
+                                <td>Acción</td>
+                            </tr>
+                        );
+                    })}
                 </tbody>
             </Table>
         </>

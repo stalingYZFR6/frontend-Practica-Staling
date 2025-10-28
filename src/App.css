@@ -6,3 +6,15 @@
 .texto-marca {
     color: rgb(111, 16, 155) ;
 }
+
+
+.color-boton-registro {
+  background-color: rgb(7, 117, 7);
+  border-color: rgb(16, 155, 58);
+
+}
+
+.color-boton-registro:hover {
+  background-color: rgb(7, 117, 7) ;
+  border-color: rgb(7, 117, 7);
+}
