@@ -1,6 +1,29 @@
 import { Table, Spinner } from "react-bootstrap";
+import { useState } from "react";
+import BotonOrden from "../ordenamiento/BotonOrden";
 
 const TablaClientes = ({ clientes, cargando }) => {
+    const [orden, setOrden] = useState({ campo: "id_categoria", direccion: "asc" });
+    
+        const manejarOrden = (campo) => {
+            setOrden((prev) => ({
+                campo,
+                direccion:
+                    prev.campo === campo && prev.direccion === "asc" ? "desc" : "asc",
+            }));
+        };
+    
+        const clientesOrdenados = [...clientes].sort((a, b) => {
+            const valorA = a[orden.campo];
+            const valorB = b[orden.campo];
+    
+            if (typeof valorA === "number" && typeof valorB === "number") {
+                return orden.direccion === "asc" ? valorA - valorB : valorB - valorA;
+            }
+    
+            const comparacion = String(valorA).localeCompare(String(valorB));
+            return orden.direccion === "asc" ? comparacion : -comparacion;
+        });
 
     if (cargando){
         return(
@@ -17,19 +40,43 @@ const TablaClientes = ({ clientes, cargando }) => {
             <Table striped bordered hover responsive>
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Primer Nombre</th>
-                        <th>Segundo Nombre</th>
-                        <th>Primer Apellido</th>
-                        <th>Segundo Apellido</th>
-                        <th>Celular</th>
-                        <th>Dirección</th>
-                        <th>Cédula</th>
+                        <BotonOrden campo="id_cliente" orden={orden} manejarOrden={manejarOrden}>
+                            ID
+                        </BotonOrden>
+
+                        <BotonOrden campo="primer_nombre" orden={orden} manejarOrden={manejarOrden}>
+                            Primer Nombre
+                        </BotonOrden>
+
+                        <BotonOrden campo="segundo_nombre" orden={orden} manejarOrden={manejarOrden}>
+                            Segundo Nombre
+                        </BotonOrden>
+
+                        <BotonOrden campo="primer_apellido" orden={orden} manejarOrden={manejarOrden}>
+                            Primer Apellido
+                        </BotonOrden>
+
+                        <BotonOrden campo="segundo_apellido" orden={orden} manejarOrden={manejarOrden}>
+                            Segundo Apellido
+                        </BotonOrden>
+
+                        <BotonOrden campo="celular" orden={orden} manejarOrden={manejarOrden}>
+                            Celular
+                        </BotonOrden>
+
+                        <BotonOrden campo="direccion" orden={orden} manejarOrden={manejarOrden}>
+                            Dirección
+                        </BotonOrden>
+
+                        <BotonOrden campo="cedula" orden={orden} manejarOrden={manejarOrden}>
+                            Cédula
+                        </BotonOrden>
+
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {clientes.map((cliente) => {
+                    {clientesOrdenados.map((cliente) => {
                         return (
                             <tr key={cliente.id_cliente}>
                                 <td>{cliente.id_cliente}</td>
