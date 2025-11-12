@@ -1,20 +1,8 @@
 .margen-superior-main {
-  margin-top: 40px;
-  padding: 20px;
+margin-top: 40px;
+padding: 20px;
 }
 
-.texto-marca {
-    color: rgb(111, 16, 155) ;
-}
-
-
-.color-boton-registro {
-  background-color: rgb(7, 117, 7);
-  border-color: rgb(16, 155, 58);
-
-}
-
-.color-boton-registro:hover {
-  background-color: rgb(7, 117, 7) ;
-  border-color: rgb(7, 117, 7);
+.texto-marca{
+  color:rgb(33, 9, 145)
 }
