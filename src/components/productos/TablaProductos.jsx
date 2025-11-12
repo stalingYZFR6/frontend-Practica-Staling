@@ -5,7 +5,7 @@ import Paginacion from "../ordenamiento/Paginacion";
 
 
 const TablaProductos = ({ productos,
-  cargando, 
+  cargando,
   abrirModalEdicion,
   abrirModalEliminacion,
   totalElementos,
@@ -113,7 +113,7 @@ const TablaProductos = ({ productos,
           })}
         </tbody>
       </Table>
-       <Paginacion
+      <Paginacion
         elementosPorPagina={elementosPorPagina}
         totalElementos={totalElementos}
         paginaActual={paginaActual}
