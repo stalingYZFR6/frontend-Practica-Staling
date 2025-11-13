@@ -30,6 +30,7 @@ const Ventas = () => {
     const elementosPorPagina = 5;
     const hoy = new Date().toISOString().split('T')[0];
 
+    // === ESTADO PARA REGISTRO ===
     const [nuevaVenta, setNuevaVenta] = useState({
         id_cliente: '',
         id_empleado: '',
@@ -37,7 +38,9 @@ const Ventas = () => {
         total_venta: 0
     });
 
+    // === ESTADO PARA EDICIÓN (SEPARADO) ===
     const [ventaEnEdicion, setVentaEnEdicion] = useState(null);
+
     const [detallesNuevos, setDetallesNuevos] = useState([]);
 
     const ventasPaginadas = ventasFiltradas.slice(
@@ -45,16 +48,16 @@ const Ventas = () => {
         paginaActual * elementosPorPagina
     );
 
-    // === OBTENER NOMBRES ===
+    // === MÉTODOS PARA OBTENER NOMBRES ===
     const obtenerNombreCliente = async (idCliente) => {
         if (!idCliente) return '—';
         try {
-            const resp = await fetch(`http://localhost:3000/api/clientes/${idCliente}`);
+            const resp = await fetch(`http://localhost:3000/api/cliente/${idCliente}`);
             if (!resp.ok) return '—';
             const data = await resp.json();
             return `${data.primer_nombre} ${data.primer_apellido}`;
         } catch (error) {
-            console.error(error);
+            console.error("Error al cargar nombre del cliente:", error);
             return '—';
         }
     };
@@ -62,12 +65,12 @@ const Ventas = () => {
     const obtenerNombreEmpleado = async (idEmpleado) => {
         if (!idEmpleado) return '—';
         try {
-            const resp = await fetch(`http://localhost:3000/api/empleados/${idEmpleado}`);
+            const resp = await fetch(`http://localhost:3000/api/empleado/${idEmpleado}`);
             if (!resp.ok) return '—';
             const data = await resp.json();
             return `${data.primer_nombre} ${data.primer_apellido}`;
         } catch (error) {
-            console.error(error);
+            console.error("Error al cargar nombre del empleado:", error);
             return '—';
         }
     };
@@ -75,17 +78,17 @@ const Ventas = () => {
     const obtenerNombreProducto = async (idProducto) => {
         if (!idProducto) return '—';
         try {
-            const resp = await fetch(`http://localhost:3000/api/productos/${idProducto}`);
+            const resp = await fetch(`http://localhost:3000/api/producto/${idProducto}`);
             if (!resp.ok) return '—';
             const data = await resp.json();
             return data.nombre_producto || '—';
         } catch (error) {
-            console.error(error);
+            console.error("Error al cargar nombre del producto:", error);
             return '—';
         }
     };
 
-    // === OBTENER VENTAS ===
+    // === CARGAR VENTAS CON NOMBRES ===
     const obtenerVentas = async () => {
         try {
             const resp = await fetch('http://localhost:3000/api/ventas');
@@ -110,10 +113,10 @@ const Ventas = () => {
         }
     };
 
-    // === OBTENER DETALLES DE VENTA ===
+    // === CARGAR DETALLES CON NOMBRE DE PRODUCTO ===
     const obtenerDetallesVenta = async (id_venta) => {
         try {
-            const resp = await fetch('http://localhost:3000/api/detalles_ventas');
+            const resp = await fetch('http://localhost:3000/api/detallesventas');
             if (!resp.ok) throw new Error('Error al cargar detalles');
             const todos = await resp.json();
             const filtrados = todos.filter(d => d.id_venta === parseInt(id_venta));
@@ -137,25 +140,34 @@ const Ventas = () => {
     const obtenerClientes = async () => {
         try {
             const resp = await fetch('http://localhost:3000/api/clientes');
+            if (!resp.ok) throw new Error('Error al cargar clientes');
             const datos = await resp.json();
             setClientes(datos);
-        } catch (error) { console.error(error); }
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     const obtenerEmpleados = async () => {
         try {
             const resp = await fetch('http://localhost:3000/api/empleados');
+            if (!resp.ok) throw new Error('Error al cargar empleados');
             const datos = await resp.json();
             setEmpleados(datos);
-        } catch (error) { console.error(error); }
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     const obtenerProductos = async () => {
         try {
             const resp = await fetch('http://localhost:3000/api/productos');
+            if (!resp.ok) throw new Error('Error al cargar productos');
             const datos = await resp.json();
             setProductos(datos);
-        } catch (error) { console.error(error); }
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     // === BÚSQUEDA ===
@@ -209,13 +221,14 @@ const Ventas = () => {
     // === EDICIÓN ===
     const abrirModalEdicion = async (venta) => {
         setVentaAEditar(venta);
+
         setVentaEnEdicion({
             id_cliente: venta.id_cliente,
             id_empleado: venta.id_empleado,
             fecha_venta: new Date(venta.fecha_venta).toISOString().split("T")[0]
         });
 
-        const resp = await fetch('http://localhost:3000/api/detalles_ventas');
+        const resp = await fetch('http://localhost:3000/api/detallesventas');
         const todos = await resp.json();
         const detallesRaw = todos.filter(d => d.id_venta === venta.id_venta);
 
@@ -241,7 +254,7 @@ const Ventas = () => {
                 body: JSON.stringify({ ...ventaEnEdicion, total_venta: total })
             });
 
-            const resp = await fetch('http://localhost:3000/api/detalles_ventas');
+            const resp = await fetch('http://localhost:3000/api/detallesventas');
             const todos = await resp.json();
             const actuales = todos.filter(d => d.id_venta === ventaAEditar.id_venta);
             for (const d of actuales) {
@@ -259,7 +272,6 @@ const Ventas = () => {
             await obtenerVentas();
             cerrarModalEdicion();
         } catch (error) {
-            console.error(error);
             alert("Error al actualizar.");
         }
     };
@@ -290,7 +302,7 @@ const Ventas = () => {
     const cerrarModalEdicion = () => {
         setMostrarModalEdicion(false);
         setVentaAEditar(null);
-        setVentaEnEdicion(null);
+        setVentaEnEdicion(null);  // Limpia estado de edición
         setDetallesNuevos([]);
     };
 
